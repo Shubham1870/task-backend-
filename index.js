@@ -35,7 +35,7 @@ app.get("/v1/tasks",async(req,res)=>{
 })
 app.get("/v1/tasks/:id",async(req,res)=>{
     try{
-        const data=await mymodel.findOne({})
+        const data=await mymodel.findOne({_id:req.params.id})
         res.status(200).json({
             status:"success",
             data:data
@@ -51,7 +51,7 @@ app.get("/v1/tasks/:id",async(req,res)=>{
 
 app.post("/v1/tasks",async(req,res)=>{
     try{
-        if((res.body.title=="")){
+        if((req.body.title=="")){
             res.status(200).json({
                 status:"error",
                 message:"all field mandatory"
@@ -76,13 +76,13 @@ app.post("/v1/tasks",async(req,res)=>{
 
 app.put("/v1/tasks/:id",async(req,res)=>{
     try{
-        if((res.body.title=="")){
+        if((req.body.title=="")){
             res.status(200).json({
                 status:"error",
                 message:"all field mandatory"
             })
         }
-        await mymodel.find({_id:req.params.id}).updateOne(req.body)
+        await mymodel.updateOne({_id:req.params.id},req.body)
         const data=await mymodel.findOne({_id:req.params.id})
         res.status(200).json({
             status:"success",
